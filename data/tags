@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DataPool	data_pool.py	/^class DataPool():$/;"	c
+Dataset_Pool	dataset.py	/^class Dataset_Pool(data.Dataset):$/;"	c
+RawDataset	dataset.py	/^class RawDataset(data.Dataset):$/;"	c
+__getitem__	dataset.py	/^    def __getitem__(self, index):$/;"	m	class:Dataset_Pool	file:
+__getitem__	dataset.py	/^    def __getitem__(self, index):$/;"	m	class:RawDataset	file:
+__init__	data_pool.py	/^    def __init__(self, cap, dir_pool=config.dir_pool):$/;"	m	class:DataPool
+__init__	dataset.py	/^    def __init__(self, data_dir, data_type, task, classes):$/;"	m	class:RawDataset
+__init__	dataset.py	/^    def __init__(self, data_pool):$/;"	m	class:Dataset_Pool
+__len__	dataset.py	/^    def __len__(self):$/;"	m	class:Dataset_Pool	file:
+__len__	dataset.py	/^    def __len__(self):$/;"	m	class:RawDataset	file:
+add_data	data_pool.py	/^    def add_data(self, model, new_data, num_everyclass):$/;"	m	class:DataPool
+concat_datasets	dataset.py	/^def concat_datasets(datasets_list):$/;"	f
+load_data	__init__.py	/^def load_data(data_dir, data_type, task, classes):$/;"	f
+load_data_pool	data_pool.py	/^    def load_data_pool(self):$/;"	m	class:DataPool
+load_dataloader	__init__.py	/^def load_dataloader(dataset, batch_size, num_workers, shuffle=False):$/;"	f
+load_feature_mean	data_pool.py	/^    def load_feature_mean(self):$/;"	m	class:DataPool
+save_data_pool	data_pool.py	/^    def save_data_pool(self, path=self.dir_pool):$/;"	m	class:DataPool
