@@ -28,7 +28,8 @@ class DataPool():
         dir_pool: str, the stored directory of data pool,
 
     Return:
-        data pool.
+        DataPool()
+        self.data_pool: 
     """
     def __init__(self, cap, dir_pool=config.dir_pool):
         self.data_pool = {}
@@ -43,6 +44,11 @@ class DataPool():
     def add_data(self, model, new_data, label_list, num_everyclass):
         """add the new data to datapool and reduce the quatity of data stored.
         
+        Args:
+            model: representer.
+            new_data: list, [[data,[label]], ...]
+            label_list: list, ['0'...]
+            num_everyclass: int.
         """
         # if the data pool isn't None, adjust the number of data stored
         if len(self.data_pool) >= 0:
@@ -54,24 +60,25 @@ class DataPool():
         for label in label_list:
             data_dict[label] = []
             for data in new_data:
-                if str(data[1]) == label:
-                    data_dict[label].append(data[0].cpu().numpy())
+                if data[1] == int(label):
+                    assert np.array(data[0]).shape == config.data_shape, "data shape isn't consistent"
+                    data_dict[label].append(data[0])
 
         # select representive data
         feature_mean_dict = {}
         for key, value in data_dict.items():
             dataset_input = []
             for value_i in value:
-                dataset_input.append([value_i, key])
+                dataset_input.append([value_i, int(key)])
             dataset_tmp = Dataset_Pool(dataset_input)
             dataloader_tmp = DataLoader(dataset_tmp, batch_size=config.batch_size, num_workers=config.num_workers)
             data_feature = get_output(model, dataloader_tmp)
             feature_mean = np.mean(data_feature, axis=0)
             dist_data = np.sum(data_feature-feature_mean, axis=1)
             idx_selected = np.argsort(dist_data)
-            data_selected = data_feature[idx_selected][:num_everyclass]
+            data_selected = get_data_by_index(value, list(idx_selected))[:num_everyclass]
             data_dict[key] = data_selected
-            feature_mean_dict[key] = feature_mean
+            feature_mean_dict[key] = feature_mean # np.array
 
         # udpate the datapool
         self.data_pool.update(data_dict)
@@ -89,7 +96,8 @@ class DataPool():
         data_list = []
         for key, value in self.data_pool.items():
             for value_i in value:
-                data_list.append([value_i, [key]])
+                assert value_i.shape == config.data_shape, "data shape isn't consistent."
+                data_list.append([value_i, int(key)])
         return Dataset_Pool(data_list)
 
     def load_feature_mean(self):
@@ -101,6 +109,8 @@ class DataPool():
         return self.feature_mean
 
     def save_data_pool_file(self, path=config.dir_pool):
+        if not os.path.isdir(path):
+            os.mkdir(path)
         path_data_pool = os.path.join(path, 'data_pool.pkl')
         with open(path_data_pool, 'wb') as f:
             data_to_stored = {'data_pool': self.data_pool, 'feature_mean': self.feature_mean}
@@ -125,3 +135,9 @@ def get_output(model, dataloader):
 
     output_list = np.vstack(output_list)
     return output_list
+
+def get_data_by_index(source_list, index_list):
+    result_list = []
+    for index in range(len(index_list)):
+        result_list.append(source_list[index])
+    return result_list

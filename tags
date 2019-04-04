@@ -25,16 +25,19 @@ __init__	models/resnet.py	/^    def __init__(self, inplanes, planes, stride=1, d
 __len__	data/dataset.py	/^    def __len__(self):$/;"	m	class:Dataset_Pool	file:
 __len__	data/dataset.py	/^    def __len__(self):$/;"	m	class:RawDataset	file:
 _make_layer	models/resnet.py	/^    def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None):$/;"	m	class:ResNet
+acc_cal	models/representer.py	/^def acc_cal(model, test_dataloader):$/;"	f
 add_data	data/data_pool.py	/^    def add_data(self, model, new_data, label_list, num_everyclass):$/;"	m	class:DataPool
 batch_size	config.py	/^    batch_size = 256 $/;"	v	class:Config
+cap	config.py	/^    cap = 10000$/;"	v	class:Config
 concat_datasets	data/dataset.py	/^def concat_datasets(datasets_list):$/;"	f
 config	config.py	/^config = Config()$/;"	v
 conv1x1	models/resnet.py	/^def conv1x1(in_planes, out_planes, stride=1):$/;"	f
 conv3x3	models/resnet.py	/^def conv3x3(in_planes, out_planes, stride=1):$/;"	f
+data_shape	config.py	/^    data_shape = (1, 28, 28)$/;"	v	class:Config
 data_type	config.py	/^    data_type = 'mnist'$/;"	v	class:Config
 device	config.py	/^    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')$/;"	v	class:Config
 dir_data	config.py	/^    dir_data = "\/disk1\/haohy\/images\/mnist"$/;"	v	class:Config
-dir_model	config.py	/^    dir_model = "\/disk1\/haohy\/model"$/;"	v	class:Config
+dir_model	config.py	/^    dir_model = "\/disk1\/haohy\/models"$/;"	v	class:Config
 dir_path	data/__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
 dir_path	models/__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
 dir_pool	config.py	/^    dir_pool = "\/disk1\/haohy\/data_pool"$/;"	v	class:Config
@@ -44,6 +47,10 @@ forward	models/classifier.py	/^    def forward(self, x):$/;"	m	class:Classifier
 forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:BasicBlock
 forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:Bottleneck
 forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:ResNet
+get_data_by_index	data/data_pool.py	/^def get_data_by_index(source_list, index_list):$/;"	f
+get_inter_feature	data/data_pool.py	/^    def get_inter_feature(name):$/;"	f	function:get_output
+get_output	data/data_pool.py	/^def get_output(model, dataloader):$/;"	f
+hook	data/data_pool.py	/^        def hook(model, input, output):$/;"	f	function:get_output.get_inter_feature
 label2vec	utils/tools.py	/^def label2vec(target, label_dict, output_dim):$/;"	f
 label_list	main.py	/^    label_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']$/;"	v
 load_data	data/__init__.py	/^def load_data(data_dir, data_type, task, classes):$/;"	f
@@ -54,7 +61,7 @@ load_model	models/representer.py	/^def load_model(model, num_classes=0, dir_mode
 lr	config.py	/^    lr = 1e-3$/;"	v	class:Config
 lr_schedule	config.py	/^    lr_schedule = False$/;"	v	class:Config
 model_urls	models/resnet.py	/^model_urls = {$/;"	v
-num_epochs	config.py	/^    num_epochs = 2$/;"	v	class:Config
+num_epochs	config.py	/^    num_epochs = 20$/;"	v	class:Config
 num_inc	config.py	/^    num_inc = 2$/;"	v	class:Config
 num_workers	config.py	/^    num_workers = 4$/;"	v	class:Config
 resnet101	models/resnet.py	/^def resnet101(pretrained=False, **kwargs):$/;"	f

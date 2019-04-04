@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from IPython import embed
 from data import DataPool, RawDataset, load_data, load_dataloader, concat_datasets
-from models import resnet18, resnet50, save_model, load_model
+from models import resnet18, resnet50, save_model, load_model, acc_cal
 from config import config
 
 import logging
@@ -40,6 +40,8 @@ def train(dir_data, label_list, num_epochs, num_inc, lr, batch_size=64, device='
         train_dataset_new = load_data(dir_data, data_type, task, label_sep)
         train_dataset = concat_datasets([train_dataset_old, train_dataset_new])
         train_dataloader = load_dataloader(train_dataset, batch_size, num_workers)
+        test_dataset = load_data(dir_data, data_type, 'test', label_sep)
+        test_dataloader = load_dataloader(test_dataset, batch_size, num_workers)
 
         # define loss function
         criterion = nn.CrossEntropyLoss()
@@ -66,7 +68,8 @@ def train(dir_data, label_list, num_epochs, num_inc, lr, batch_size=64, device='
                 loss.backward()
                 optimizer.step()
 
-            logging.info("Classes: {}/{}, Epoch: {}/{}, Loss: {:.4f}, Evel_Loss: {}".format(num_now_classes, num_total_classes, epoch+1, num_epochs, sum_loss.data, 0))
+            acc = acc_cal(model, test_dataloader)
+            logging.info("Classes: {}/{}, Epoch: {}/{}, Loss: {:.4f}, Eval_Loss: {:.4f}".format(num_now_classes, num_total_classes, epoch+1, num_epochs, sum_loss.data, acc))
 
         # save samples to data pool
         num_everyclass = int(data_pool.cap/num_now_classes)

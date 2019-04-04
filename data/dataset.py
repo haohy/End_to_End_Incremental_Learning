@@ -72,7 +72,7 @@ class Dataset_Pool(data.Dataset):
         
     def __getitem__(self, index):
         data, label = self.data[index]
-        return torch.from_numpy(data), torch.from_numpy(label)
+        return data, label
 
     def __len__(self):
         return len(self.data)
@@ -81,5 +81,4 @@ class Dataset_Pool(data.Dataset):
 def concat_datasets(datasets_list):
     """concat dataset of dataset_list.
     """
-    embed()
     return data.ConcatDataset(datasets_list)
