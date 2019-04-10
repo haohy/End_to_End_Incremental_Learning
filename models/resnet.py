@@ -104,13 +104,13 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
 
-    def __init__(self, block, layers, num_classes=100, zero_init_residual=False, norm_layer=None):
+    def __init__(self, channel, block, layers, num_classes=100, zero_init_residual=False, norm_layer=None):
         super(ResNet, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         self.inplanes = 64
         self.num_classes = num_classes
-        self.conv1 = nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=3,
+        self.conv1 = nn.Conv2d(channel, 64, kernel_size=3, stride=2, padding=3,
                                bias=False)
         self.bn1 = norm_layer(64)
         self.relu = nn.ReLU(inplace=True)
@@ -175,15 +175,15 @@ class ResNet(nn.Module):
         return x
 
 
-def resnet18(pretrained=False, **kwargs):
+def resnet18(channel, pretrained=False, **kwargs):
     """Constructs a ResNet-18 model.
 
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
-    model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
-    if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['resnet18']))
+    model = ResNet(channel, BasicBlock, [2, 2, 2, 2], **kwargs)
+    # if pretrained:
+    #     model.load_state_dict(model_zoo.load_url(model_urls['resnet18']))
     return model
 
 

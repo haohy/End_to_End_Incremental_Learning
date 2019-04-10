@@ -9,15 +9,24 @@ Dataset_Pool	dataset.py	/^class Dataset_Pool(data.Dataset):$/;"	c
 RawDataset	dataset.py	/^class RawDataset(data.Dataset):$/;"	c
 __getitem__	dataset.py	/^    def __getitem__(self, index):$/;"	m	class:Dataset_Pool	file:
 __getitem__	dataset.py	/^    def __getitem__(self, index):$/;"	m	class:RawDataset	file:
-__init__	data_pool.py	/^    def __init__(self, cap, dir_pool=config.dir_pool):$/;"	m	class:DataPool
-__init__	dataset.py	/^    def __init__(self, data_dir, data_type, task, classes):$/;"	m	class:RawDataset
+__init__	data_pool.py	/^    def __init__(self, cap, data_type, dir_pool):$/;"	m	class:DataPool
 __init__	dataset.py	/^    def __init__(self, data_pool):$/;"	m	class:Dataset_Pool
+__init__	dataset.py	/^    def __init__(self, dir_data, data_type, task, classes):$/;"	m	class:RawDataset
 __len__	dataset.py	/^    def __len__(self):$/;"	m	class:Dataset_Pool	file:
 __len__	dataset.py	/^    def __len__(self):$/;"	m	class:RawDataset	file:
-add_data	data_pool.py	/^    def add_data(self, model, new_data, num_everyclass):$/;"	m	class:DataPool
+add_data	data_pool.py	/^    def add_data(self, model, new_data, label_list, num_everyclass, device):$/;"	m	class:DataPool
 concat_datasets	dataset.py	/^def concat_datasets(datasets_list):$/;"	f
+dir_path	__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
+get_data_by_index	data_pool.py	/^def get_data_by_index(source_list, index_list):$/;"	f
+get_dir_classes	dataset.py	/^def get_dir_classes(dir_data, data_type, task, classes):$/;"	f
+get_imgs_dict	dataset.py	/^def get_imgs_dict(dir_classes):$/;"	f
+get_imgs_list	dataset.py	/^def get_imgs_list(dir_classes):$/;"	f
+get_inter_feature	data_pool.py	/^    def get_inter_feature(name):$/;"	f	function:get_output
+get_output	data_pool.py	/^def get_output(model, dataloader, device):$/;"	f
+get_transforms	dataset.py	/^def get_transforms(data_type):$/;"	f
+hook	data_pool.py	/^        def hook(model, input, output):$/;"	f	function:get_output.get_inter_feature
 load_data	__init__.py	/^def load_data(data_dir, data_type, task, classes):$/;"	f
 load_data_pool	data_pool.py	/^    def load_data_pool(self):$/;"	m	class:DataPool
 load_dataloader	__init__.py	/^def load_dataloader(dataset, batch_size, num_workers, shuffle=False):$/;"	f
 load_feature_mean	data_pool.py	/^    def load_feature_mean(self):$/;"	m	class:DataPool
-save_data_pool	data_pool.py	/^    def save_data_pool(self, path=self.dir_pool):$/;"	m	class:DataPool
+save_data_pool_file	data_pool.py	/^    def save_data_pool_file(self, path=self.dir_pool):$/;"	m	class:DataPool

@@ -9,11 +9,13 @@ from IPython import embed
 from config import config
 from resnet import resnet18, resnet50
 
-def save_model(model, dir_model=config.dir_model):
+def save_model(model, dir_model):
+    if not os.path.isdir(dir_model):
+        os.mkdir(dir_model)
     path_model = os.path.join(dir_model, 'E2E.pth')
     torch.save(model.state_dict(), path_model)
 
-def load_model(model, num_classes=0, dir_model=config.dir_model):
+def load_model(model, num_classes, dir_model):
     """Get model trained using previous data, if num_classes=0, unchange the 
     output layer's dimensionality, else change it to num_classses.
     """
