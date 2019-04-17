@@ -12,6 +12,6 @@ def load_data(data_dir, data_type, task, classes):
     dataset = RawDataset(data_dir, data_type, task, classes)
     return dataset
 
-def load_dataloader(dataset, batch_size, num_workers, shuffle=False):
+def load_dataloader(dataset, batch_size, num_workers, shuffle=True):
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
     return dataloader

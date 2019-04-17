@@ -30,14 +30,25 @@ def load_model(model, num_classes, dir_model):
 
 def acc_cal(model, test_dataloader):
     """calculate the accuracy of model."""
+    model.eval()
     total = 0
     right = 0
-    for i, (train_batch, label_batch) in enumerate(test_dataloader):
-        train_batch = train_batch.to(config.device)
-        output_batch = model(train_batch)
-        total += len(train_batch)
-        output_label = np.argmax(output_batch.cpu().data.numpy(), axis=1)
-        right += np.sum(output_label == label_batch.cpu().data.numpy())
+    with torch.no_grad():
+        for i, (train_batch, label_batch) in enumerate(test_dataloader):
+            train_batch = train_batch.to(config.device)
+            label_batch = label_batch.to(config.device)
+            output_batch = model(train_batch)
+            pred = output_batch.argmax(dim=1, keepdim=True)
+            right += pred.eq(label_batch.view_as(pred)).sum().item()
+            # _, outputs = torch.max(output_batch, 1)
+            # right += torch.sum(outputs.cpu() == label_batch.data).double()
+            # embed()
+            # output_batch = np.argmax(output_batch.cpu().data.numpy(), axis=1)
+            # label_batch = label_batch.cpu().data.numpy()
+            # for i in range(len(label_batch)):
+            #     if label_batch[i] == output_batch[i]:
+            #         right += 1
 
+    total = len(test_dataloader.dataset)
     acc = right/total
     return acc

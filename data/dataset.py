@@ -52,24 +52,24 @@ class RawDataset(data.Dataset):
     def __len__(self):
         return len(self.imgs_list)
 
-class Dataset_Pool(data.Dataset):
-    """A generic data set where the data are from data pool.
-
-    Args:
-        data_pool, DataPool(),
-
-    Return:
-        Dataset of the DataPool.
-    """
-    def __init__(self, data_pool):
-        self.data = data_pool
-        
-    def __getitem__(self, index):
-        data, label = self.data[index]
-        return data, label
-
-    def __len__(self):
-        return len(self.data)
+# class Dataset_Pool(data.Dataset):
+#     """A generic data set where the data are from data pool.
+# 
+#     Args:
+#         data_pool, DataPool(),
+# 
+#     Return:
+#         Dataset of the DataPool.
+#     """
+#     def __init__(self, data_pool):
+#         self.data = data_pool
+#         
+#     def __getitem__(self, index):
+#         data, label = self.data[index]
+#         return data, label
+# 
+#     def __len__(self):
+#         return len(self.data)
 
 
 def concat_datasets(datasets_list):
