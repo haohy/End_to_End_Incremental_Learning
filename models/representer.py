@@ -12,19 +12,29 @@ from resnet import resnet18, resnet50
 def save_model(model, dir_model):
     if not os.path.isdir(dir_model):
         os.mkdir(dir_model)
-    path_model = os.path.join(dir_model, 'E2E.pth')
+    path_model = os.path.join(dir_model, 'TS_IL.pth')
     torch.save(model.state_dict(), path_model)
+
+def Linear(input_size, output_size, activation=None, p=0., bias=True):
+    model = [nn.Linear(input_size, output_size, bias=bias)]
+    if activation == 'relu':
+        model += [nn.ReLU(inplace=True)]
+    elif activation == 'sigmoid':
+        model += [nn.Sigmoid()]
+    if p > 0.:
+        model += [nn.Dropout(p)]
+    return nn.Sequential(*model)
 
 def load_model(model, num_classes, dir_model):
     """Get model trained using previous data, if num_classes=0, unchange the 
     output layer's dimensionality, else change it to num_classses.
     """
-    path_model = os.path.join(dir_model, 'E2E.pth')
+    path_model = os.path.join(dir_model, 'TS_IL.pth')
     model_old = torch.load(path_model)
     model.load_state_dict(model_old, strict=False)
     if num_classes != 0:
-        fc_features = model.fc.in_features
-        model.fc = nn.Linear(fc_features, num_classes)
+        fc_features = model.fc[0].in_features
+        model.fc = Linear(fc_features, num_classes, 'sigmoid')
 
     return model
 

@@ -4,41 +4,51 @@ import torch
 import shutil
 import torch.nn as nn
 import torch.optim as optim
+from torch.autograd import Variable
 from torch.optim.lr_scheduler import StepLR
 from tensorboardX import SummaryWriter
 from IPython import embed
 from data import DataPool, RawDataset, load_data, load_dataloader, concat_datasets
-from models import resnet18, resnet50, save_model, load_model, acc_cal
+from models import BenchMark, save_model, load_model, acc_cal
 from config import config
-from utils import Logger
+from utils import Logger, adjust_lr
 
 import logging
 logging.basicConfig( \
     level = logging.INFO, \
     format='[%(levelname)s %(asctime)s %(filename)s:%(lineno)d] %(message)s')
 
-def train(data_type='mnist', num_inc=2, cap=1000, lr=0.001, name_log='default', num_epochs=60, batch_size=64, device='gpu', lr_schedule=False, optimizer='adam', dir_data='./', dir_model='./', num_workers=4):
+def train(dataname, num_dims, num_inc=2, cap=1000, lr=0.001, name_log='default', num_epochs=60, batch_size=64, device='gpu', lr_schedule=False, optimizer='adam', dir_data='./', num_workers=4):
+
+    dir_root = os.path.join(dir_data, dataname)
+    dir_model = os.path.join(dir_root, 'model')
+    dir_logs = os.path.join(dir_root, 'logs', name_log)
 
     logging.info("start training.")
 
     logging.info("delete present data pool")
-    shutil.rmtree(os.path.join(dir_data, 'data_pool'))
+    if os.path.exists(os.path.join(dir_root, 'data_pool.pkl')):
+        os.remove(os.path.join(dir_root, 'data_pool.pkl'))
 
-    label_list = [str(i) for i in range(len(os.listdir(os.path.join(dir_data, 'train'))))]
+    with open(os.path.join(dir_root, 'classes.txt'), 'r') as f:
+        label_list = f.readlines()[0].strip().split(' ')
+    logging.info("total number of classes is {}".format(len(label_list)))
+    print(label_list)
     label_sep_list = [label_list[i:i+num_inc] for i in range(0, len(label_list), num_inc)]
     num_total_classes = len(label_list)
     num_now_classes = 0
 
     # load model
-    model = resnet18(config.data_shape[2])
+    model = BenchMark(num_dims, 2)
     save_model(model, dir_model)
-    logging.info("define the representer model(resnet18)")
+    logging.info("define the representer model")
 
     # define DataPool
-    data_pool = DataPool(dir_data=dir_data, cap=cap, data_type=data_type)
+    data_pool = DataPool(dir_data=dir_data, cap=cap, dataname=dataname)
 
-    for label_sep in label_sep_list:
+    for num_inc, label_sep in enumerate(label_sep_list):
         num_now_classes += len(label_sep)
+        acc_best = 0
 
         # load stored model trained using old classes's data
         model = load_model(model, num_now_classes, dir_model) 
@@ -47,24 +57,21 @@ def train(data_type='mnist', num_inc=2, cap=1000, lr=0.001, name_log='default', 
         logging.info("reload the old model.")
 
         # define logger
-        logger = SummaryWriter(config.dir_logs)
+        logger = SummaryWriter(dir_logs)
 
         # dataloader of old and new datasets 
         train_dataset_old = data_pool.load_data_pool()
-        train_dataset_new = load_data(dir_data, data_type, 'train', label_sep)
+        train_dataset_new = load_data(dir_data, dataname, 'train', label_sep)
         train_dataset = concat_datasets([train_dataset_old, train_dataset_new])
         train_dataloader = load_dataloader(train_dataset, batch_size, num_workers)
-        test_dataset = load_data(dir_data, data_type, 'test', data_pool.classes+label_sep)
-        test_dataloader = load_dataloader(test_dataset, 64, num_workers)
+        test_dataset = load_data(dir_data, dataname, 'test', data_pool.classes+label_sep)
+        test_dataloader = load_dataloader(test_dataset, 16, num_workers)
 
         # define loss function
         criterion = nn.CrossEntropyLoss()
         if optimizer == 'adam':
             optimizer = optim.Adam(model.parameters(), lr=lr)
 
-        # lr schedule
-        if lr_schedule:
-            scheduler = StepLR(optimizer, step_size=60, gamma=0.1)
 
         # train the representer
         for epoch in range(num_epochs):
@@ -72,7 +79,9 @@ def train(data_type='mnist', num_inc=2, cap=1000, lr=0.001, name_log='default', 
             model.train() 
             sum_loss = 0
             
-            scheduler.step()
+            # lr schedule
+            if lr_schedule:
+                adjust_lr(optimizer, lr, epoch)
 
             for i, (train_batch, label_batch) in enumerate(train_dataloader):
 
@@ -88,11 +97,14 @@ def train(data_type='mnist', num_inc=2, cap=1000, lr=0.001, name_log='default', 
                 optimizer.step()
 
             acc = acc_cal(model, test_dataloader)
+            acc_best = acc
 
             logging.info("Classes: {}/{}, Epoch: {}/{}, Loss: {:.4f}, Acc: {:.4f}".format(num_now_classes, num_total_classes, epoch+1, num_epochs, sum_loss.data, acc))
 
             logger.add_scalars('data/Classes_{}'.format(num_now_classes), {'loss': sum_loss.data}, epoch)
             logger.add_scalars('data/Classes_{}'.format(num_now_classes), {'acc': acc}, epoch)
+
+        logger.add_scalars('data/acc_incremental', {'acc_incremental': acc_best}, num_inc) 
 
         # save samples to data pool
         num_everyclass = int(data_pool.cap/num_now_classes)
@@ -103,16 +115,16 @@ def train(data_type='mnist', num_inc=2, cap=1000, lr=0.001, name_log='default', 
         logger.close()
 
 if __name__ == '__main__':
-    train(data_type=config.data_type, \
+    train(dataname=config.dataname, \
+            num_dims=config.num_dims, \
             num_inc=config.num_inc, \
             cap=config.cap, \
             lr=config.lr, \
-            name_log='default', \
+            name_log='cap_10000_epochs_100', \
             num_epochs=config.num_epochs, \
             batch_size=config.batch_size, \
             device=config.device, \
             lr_schedule=config.lr_schedule, \
             optimizer='adam', \
             dir_data=config.dir_data, \
-            dir_model=config.dir_model, \
             num_workers=config.num_workers)

@@ -6,3 +6,4 @@ sys.path.append(os.getcwd())
 
 from .resnet import resnet18, resnet50
 from .representer import save_model, load_model, acc_cal
+from .benchmark import BenchMark
