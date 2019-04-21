@@ -4,47 +4,33 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BasicBlock	models/resnet.py	/^class BasicBlock(nn.Module):$/;"	c
 BenchMark	models/benchmark.py	/^class BenchMark(nn.Module):$/;"	c
-Bottleneck	models/resnet.py	/^class Bottleneck(nn.Module):$/;"	c
 Config	config.py	/^class Config():$/;"	c
 Conv1d	models/benchmark.py	/^def Conv1d(in_channels, out_channels, kernel_size, stride=1, padding=0, activation=None, p=0., bias=True):$/;"	f
 DataPool	data/data_pool.py	/^class DataPool():$/;"	c
 Linear	models/benchmark.py	/^def Linear(input_size, output_size, activation=None, p=0., bias=True):$/;"	f
 Linear	models/representer.py	/^def Linear(input_size, output_size, activation=None, p=0., bias=True):$/;"	f
-Logger	utils/logger.py	/^class Logger(object):$/;"	c
 RawDataset	data/dataset.py	/^class RawDataset(data.Dataset):$/;"	c
-ResNet	models/resnet.py	/^class ResNet(nn.Module):$/;"	c
-__all__	models/resnet.py	/^__all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',$/;"	v
 __getitem__	data/dataset.py	/^    def __getitem__(self, index):$/;"	m	class:RawDataset	file:
 __init__	data/data_pool.py	/^    def __init__(self, dir_data, cap, dataname):$/;"	m	class:DataPool
 __init__	data/dataset.py	/^    def __init__(self, dir_data, dataname, task, classes):$/;"	m	class:RawDataset
 __init__	models/benchmark.py	/^    def __init__(self, input_size, output_size, channels_list=[16,32,64], kernel_size_list=[3,3,3], strides=[2,2,2], activation='relu'):$/;"	m	class:BenchMark
-__init__	models/resnet.py	/^    def __init__(self, channel, block, layers, num_classes=100, zero_init_residual=False, norm_layer=None):$/;"	m	class:ResNet
-__init__	models/resnet.py	/^    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=None):$/;"	m	class:BasicBlock
-__init__	models/resnet.py	/^    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=None):$/;"	m	class:Bottleneck
-__init__	utils/logger.py	/^    def __init__(self, log_dir):$/;"	m	class:Logger
 __len__	data/dataset.py	/^    def __len__(self):$/;"	m	class:RawDataset	file:
-_make_layer	models/resnet.py	/^    def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None):$/;"	m	class:ResNet
-acc	test_resnet.py	/^    acc = acc_cal(model, test_dataloader)$/;"	v
 acc_cal	models/representer.py	/^def acc_cal(model, test_dataloader):$/;"	f
-acc_train	test_resnet.py	/^    acc_train = acc_cal(model, train_dataloader)$/;"	v
 add_data	data/data_pool.py	/^    def add_data(self, model, new_data, num_everyclass, device):$/;"	m	class:DataPool
 adjust_data_pool	data/data_pool.py	/^def adjust_data_pool(data_pool_dict, num_everyclass):$/;"	f
 adjust_lr	utils/tools.py	/^def adjust_lr(optimizer, lr, epoch):$/;"	f
 batch_size	config.py	/^    batch_size = 16$/;"	v	class:Config
-cap	config.py	/^    cap = 1000$/;"	v	class:Config
+benchmark	models/benchmark.py	/^    benchmark = BenchMark(100, 2)$/;"	v	class:BenchMark
+cap	config.py	/^    cap = 10000$/;"	v	class:Config
 classes	data/dataset.py	/^    classes = ['1', '2']$/;"	v
 compute_dim	models/benchmark.py	/^def compute_dim(input_size, channels_list, kernel_size_list, strides):$/;"	f
 concat_datasets	data/dataset.py	/^def concat_datasets(datasets_list):$/;"	f
 config	config.py	/^config = Config()$/;"	v
-conv1x1	models/resnet.py	/^def conv1x1(in_planes, out_planes, stride=1):$/;"	f
-conv3x3	models/resnet.py	/^def conv3x3(in_planes, out_planes, stride=1):$/;"	f
-criterion	test_resnet.py	/^criterion = nn.CrossEntropyLoss()$/;"	v
-data_type	config.py	/^    data_type = 'Crop'$/;"	v	class:Config
+dataname	config.py	/^    dataname = 'Crop'$/;"	v	class:Config
 dataname	data/dataset.py	/^    dataname = 'Crop'$/;"	v
+dataname	utils/tools.py	/^    dataname = 'Crop'$/;"	v
 dataset	data/dataset.py	/^    dataset = RawDataset(dir_data, dataname, task, classes)$/;"	v
-datasets_list	utils/tools.py	/^    datasets_list = os.listdir(dir_data)$/;"	v
 device	config.py	/^    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')$/;"	v	class:Config
 dir_data	config.py	/^    dir_data = "\/disk1\/haohy\/data\/UCRArchive_2018"$/;"	v	class:Config
 dir_data	data/dataset.py	/^    dir_data = "\/disk1\/haohy\/data\/UCRArchive_2018"$/;"	v
@@ -52,59 +38,28 @@ dir_data	utils/tools.py	/^    dir_data = "\/disk1\/haohy\/data\/UCRArchive_2018"
 dir_path	data/__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
 dir_path	models/__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
 dir_path	utils/__init__.py	/^dir_path = os.path.dirname(os.path.realpath(__file__))$/;"	v
-expansion	models/resnet.py	/^    expansion = 1$/;"	v	class:BasicBlock
-expansion	models/resnet.py	/^    expansion = 4$/;"	v	class:Bottleneck
 forward	models/benchmark.py	/^    def forward(self, x):$/;"	m	class:BenchMark
-forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:BasicBlock
-forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:Bottleneck
-forward	models/resnet.py	/^    def forward(self, x):$/;"	m	class:ResNet
 from_raw_to_dataset	utils/tools.py	/^def from_raw_to_dataset(dir_data, dataname):$/;"	f
 get_inter_feature	data/data_pool.py	/^    def get_inter_feature(name):$/;"	f	function:get_output
+get_label_dict	data/dataset.py	/^def get_label_dict(dir_data, dataname):$/;"	f
 get_output	data/data_pool.py	/^def get_output(model, dataloader, device):$/;"	f
-get_path_by_index	data/data_pool.py	/^def get_path_by_index(source_list, order_list):$/;"	f
-get_transforms	data/dataset.py	/^def get_transforms():$/;"	f
+get_selected_idx	data/data_pool.py	/^def get_selected_idx(source_list, idx_list):$/;"	f
 get_ts_list	data/dataset.py	/^def get_ts_list(dir_data, dataname, task, classes):$/;"	f
-histo_summary	utils/logger.py	/^    def histo_summary(self, tag, values, step, bins=1000):$/;"	m	class:Logger
 hook	data/data_pool.py	/^        def hook(model, input, output):$/;"	f	function:get_output.get_inter_feature
-image_summary	utils/logger.py	/^    def image_summary(self, tag, images, step):$/;"	m	class:Logger
-label_batch	test_resnet.py	/^        label_batch = label_batch.to(config.device)$/;"	v
 load_data	data/__init__.py	/^def load_data(data_dir, dataname, task, classes):$/;"	f
 load_data_pool	data/data_pool.py	/^    def load_data_pool(self):$/;"	m	class:DataPool
 load_dataloader	data/__init__.py	/^def load_dataloader(dataset, batch_size, num_workers, shuffle=True):$/;"	f
 load_feature_mean	data/data_pool.py	/^    def load_feature_mean(self):$/;"	m	class:DataPool
 load_model	models/representer.py	/^def load_model(model, num_classes, dir_model):$/;"	f
-loss	test_resnet.py	/^        loss = criterion(output_batch, label_batch)$/;"	v
 lr	config.py	/^    lr = 1e-3$/;"	v	class:Config
 lr_schedule	config.py	/^    lr_schedule = True $/;"	v	class:Config
-model	test_resnet.py	/^model = load_model(model, 5, config.dir_model)$/;"	v
-model	test_resnet.py	/^model = model.to(config.device)$/;"	v
-model	test_resnet.py	/^model = resnet18(3)$/;"	v
-model_urls	models/resnet.py	/^model_urls = {$/;"	v
 num_dims	config.py	/^    num_dims = 46$/;"	v	class:Config
 num_epochs	config.py	/^    num_epochs = 100$/;"	v	class:Config
-num_inc	config.py	/^    num_inc = 5$/;"	v	class:Config
-num_workers	config.py	/^    num_workers = 1$/;"	v	class:Config
-optimizer	test_resnet.py	/^optimizer = optim.Adam(model.parameters(), lr=config.lr)$/;"	v
-output_batch	test_resnet.py	/^        output_batch = model(train_batch)$/;"	v
+num_inc	config.py	/^    num_inc = 3$/;"	v	class:Config
+num_workers	config.py	/^    num_workers = 4$/;"	v	class:Config
 rawdataset	data/dataset.py	/^    rawdataset = RawDataset(dir_data, dataname, task, classes)$/;"	v
-resnet101	models/resnet.py	/^def resnet101(pretrained=False, **kwargs):$/;"	f
-resnet152	models/resnet.py	/^def resnet152(pretrained=False, **kwargs):$/;"	f
-resnet18	models/resnet.py	/^def resnet18(channel, pretrained=False, **kwargs):$/;"	f
-resnet34	models/resnet.py	/^def resnet34(pretrained=False, **kwargs):$/;"	f
-resnet50	models/resnet.py	/^def resnet50(pretrained=False, **kwargs):$/;"	f
 save_datapool_to_pkl	data/data_pool.py	/^    def save_datapool_to_pkl(self):$/;"	m	class:DataPool
 save_model	models/representer.py	/^def save_model(model, dir_model):$/;"	f
-scalar_summary	utils/logger.py	/^    def scalar_summary(self, tag, value, step):$/;"	m	class:Logger
-schedule	test_resnet.py	/^schedule = StepLR(optimizer, step_size=40, gamma=0.1)$/;"	v
-sum_loss	test_resnet.py	/^    sum_loss = 0$/;"	v
 task	data/dataset.py	/^    task = 'train'$/;"	v
-test_dataloader	test_resnet.py	/^test_dataloader = load_dataloader(test_dataset, 128, 4)$/;"	v
-test_dataset	test_resnet.py	/^test_dataset = load_data(config.dir_data, 'cifar100', 'test', ['0', '1', '2', '3', '4'])$/;"	v
 total	data/dataset.py	/^    total = 0$/;"	v
-train	main.py	/^def train(dataname, num_inc=2, cap=1000, lr=0.001, name_log='default', num_epochs=60, batch_size=64, device='gpu', lr_schedule=False, optimizer='adam', dir_data='.\/', num_workers=4):$/;"	f
-train_batch	test_resnet.py	/^        train_batch = train_batch.to(config.device)$/;"	v
-train_dataloader	test_resnet.py	/^train_dataloader = load_dataloader(train_dataset, 256, 4)$/;"	v
-train_dataset	test_resnet.py	/^train_dataset = concat_datasets([trainset_1, trainset_2])$/;"	v
-trainset_1	test_resnet.py	/^trainset_1 = load_data(config.dir_data, 'cifar100', 'train', ['0', '1', '2'])$/;"	v
-trainset_2	test_resnet.py	/^trainset_2 = load_data(config.dir_data, 'cifar100', 'train', ['3', '4'])$/;"	v
-writer	test_resnet.py	/^writer = SummaryWriter(config.dir_log)$/;"	v
+train	main.py	/^def train(dataname, num_dims, num_inc=2, cap=1000, lr=0.001, name_log='default', num_epochs=60, batch_size=64, device='gpu', lr_schedule=False, optimizer='adam', dir_data='.\/', num_workers=4):$/;"	f

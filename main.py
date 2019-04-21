@@ -11,7 +11,7 @@ from IPython import embed
 from data import DataPool, RawDataset, load_data, load_dataloader, concat_datasets
 from models import BenchMark, save_model, load_model, acc_cal
 from config import config
-from utils import Logger, adjust_lr
+from utils import adjust_lr
 
 import logging
 logging.basicConfig( \
