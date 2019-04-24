@@ -7,7 +7,6 @@ import torchvision.models as models
 import numpy as np
 from IPython import embed
 from config import config
-from resnet import resnet18, resnet50
 
 def save_model(model, dir_model):
     if not os.path.isdir(dir_model):
